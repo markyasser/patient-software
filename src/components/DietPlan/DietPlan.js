@@ -5,11 +5,11 @@ const DietPlan = () => {
   const [dietPlan, setDietPlan] = useState("");
 
   useEffect(() => {
-    const fetchDietPlan = async () => {
-      //   const response = await axios.get("/api/diet-plan");
-      setDietPlan(response.data.plan);
-    };
-    fetchDietPlan();
+    // const fetchDietPlan = async () => {
+    //   const response = await axios.get("/api/diet-plan");
+    //   setDietPlan(response.data.plan);
+    // };
+    // fetchDietPlan();
   }, []);
 
   return (

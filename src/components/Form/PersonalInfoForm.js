@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import axios from 'axios';
 
 const PersonalInfoForm = () => {
@@ -9,7 +9,7 @@ const PersonalInfoForm = () => {
     gender: "",
   });
 
-  const history = useHistory();
+  const history = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
