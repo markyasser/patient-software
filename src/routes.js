@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PersonalInfoPage from "./pages/PersonalInfoPage";
 import DietPlanPage from "./pages/DietPlanPage";
 import FeedbackPage from "./pages/FeedbackPage";
-import StatisticsPage from "./pages/Statistics";
+import StatisticsPage from "./pages/StatisticsPage";
 
 const AppRoutes = () => (
   <Router>

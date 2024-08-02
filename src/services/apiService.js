@@ -1,10 +1,12 @@
-// import axios from "axios";
+import axios from "axios";
 
-// const api = axios.create({
-//   baseURL: "http://your-server-url/api",
-// });
+const api = axios.create({
+  baseURL: "http://localhost:4000/", // Replace with your server's base URL
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-// export const postPersonalInfo = (data) => api.post("/personal-info", data);
-// export const postHealthInfo = (data) => api.post("/health-info", data);
-// export const getDietPlan = () => api.get("/diet-plan");
-// export const postFeedback = (data) => api.post("/feedback", data);
+export const getStatistics = (data) => api.get("/analyze-data", data);
+export const postPersonalInfo = (data) => api.post("/register-user", data);
+export const postFeedback = (data) => api.post("/feedback", data);
