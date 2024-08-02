@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:4000/", // Replace with your server's base URL
+  baseURL: "http://nutrition-system.switzerlandnorth.cloudapp.azure.com:4000/", // Replace with your server's base URL
   headers: {
     "Content-Type": "application/json",
   },
