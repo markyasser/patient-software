@@ -1,24 +1,28 @@
+import React, { useEffect } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import {
   Alert,
   Box,
   Button,
+  FormControl,
   InputLabel,
   MenuItem,
   Select,
   Stack,
-  FormControl,
   TextField,
   Typography,
   Switch,
   FormControlLabel,
   Container,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 import { useState } from "react";
 import { postPersonalInfo } from "../../services/apiService";
 import DietPlan from "../DietPlan/DietPlan";
 import logo from "../../assets/create-plan.jpeg";
+import { getFoodItems } from "../../services/apiService";
 
 // Schemas for validation
 const validationSchema = yup.object().shape({
@@ -34,9 +38,10 @@ const validationSchema = yup.object().shape({
     .number()
     .required("Blood Pressure (Upper) is required"),
   is_diabetic: yup.boolean().required("Diabetic is required"),
+  excludedFoods: yup.array().of(yup.string()),
 });
 
-// Intial values for the form
+// Initial values for the form
 const initialValues = {
   name: "",
   age: "",
@@ -46,7 +51,25 @@ const initialValues = {
   blood_pressure_lower: "",
   blood_pressure_upper: "",
   is_diabetic: false,
+  excludedFoods: [],
 };
+
+// List of foods
+// const foodOptions = [
+//   "Bread",
+//   "Pasta",
+//   "Rice",
+//   "Milk",
+//   "Cheese",
+//   "Chicken",
+//   "Fish",
+//   "Beef",
+//   "Pork",
+//   "Eggs",
+//   "Nuts",
+//   "Fruits",
+//   "Vegetables",
+// ];
 
 function CreateDietPlan() {
   document.title = "Create Weekly Diet Plan";
@@ -54,6 +77,22 @@ function CreateDietPlan() {
   const [errorMessage, setErrorMessage] = useState("");
   const [currentPage, setCurrentPage] = useState("form");
   const [dietPlan, setDietPlan] = useState({});
+  const [foodOptions, setFoodOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchFoodItems = async () => {
+      try {
+        // Fetch food items
+        const res = await getFoodItems();
+        setFoodOptions(res.data.fooditems);
+        console.log(res.data.fooditems);
+      } catch (error) {
+        setErrorMessage(error.response.data.message);
+      }
+    };
+
+    fetchFoodItems();
+  }, []);
 
   const prepareData = (values) => {
     return {
@@ -65,6 +104,7 @@ function CreateDietPlan() {
       blood_pressure_lower: Number(values.blood_pressure_lower), // Convert to number
       blood_pressure_upper: Number(values.blood_pressure_upper), // Convert to number
       is_diabetic: Boolean(values.is_diabetic), // Ensure boolean
+      excludedFoods: values.excludedFoods, // List of excluded foods
     };
   };
 
@@ -267,6 +307,46 @@ function CreateDietPlan() {
                         }
                         helperText={touched.is_diabetic && errors.is_diabetic}
                       />
+                    </Stack>
+
+                    <Stack direction="row" spacing={2} mt={2}>
+                      <FormControl fullWidth>
+                        <InputLabel id="excluded-foods-label">
+                          Exclude Foods
+                        </InputLabel>
+                        <Select
+                          labelId="excluded-foods-label"
+                          label="Exclude Foods"
+                          multiple
+                          value={values.excludedFoods}
+                          name="excludedFoods"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={
+                            Boolean(touched.excludedFoods) &&
+                            Boolean(errors.excludedFoods)
+                          }
+                          renderValue={(selected) => selected.join(", ")}
+                        >
+                          {foodOptions &&
+                            foodOptions.map((food) => (
+                              <MenuItem key={food} value={food}>
+                                <Checkbox
+                                  checked={values.excludedFoods.includes(food)}
+                                />
+                                <ListItemText primary={food} />
+                              </MenuItem>
+                            ))}
+                        </Select>
+                        {Boolean(touched.excludedFoods) && (
+                          <Typography
+                            variant="body2"
+                            sx={{ color: "error.main", mt: 0.5 }}
+                          >
+                            {errors.excludedFoods}
+                          </Typography>
+                        )}
+                      </FormControl>
                     </Stack>
 
                     <Button

@@ -1,24 +1,59 @@
 import * as React from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
+  Typography,
+} from "@mui/material";
 import { postFeedback } from "../../services/apiService";
 
+const FeedbackDialog = ({ open, handleClose, message, onSuccess }) => {
+  const navigate = useNavigate();
+
+  return (
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+      <DialogTitle>Thank you for your FeedBack</DialogTitle>
+      <DialogContent>
+        <Typography variant="body1">{message}</Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => navigate("/")}>Back to Dashboard</Button>
+        <Button
+          onClick={handleClose}
+          style={{ backgroundColor: "#3f51b5", color: "#fff" }}
+        >
+          OK
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
 export default function FeedBack() {
-  const [value, setValue] = React.useState(2);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+  const [feedbackValue, setFeedbackValue] = useState(2);
 
   const handleSubmit = async () => {
     try {
-      const res = await postFeedback({ feedback: value });
+      const res = await postFeedback({ feedback: feedbackValue });
       if (res.data["status"] === "success") {
-        alert(`Feedback submitted with a rating of ${value}`);
+        setDialogMessage(
+          `Feedback submitted with a rating of ${feedbackValue}`
+        );
       } else {
-        alert(`Failed to submit feedback. Please try again.`);
+        setDialogMessage(`Failed to submit feedback. Please try again.`);
       }
     } catch (error) {
-      alert(`Server error. Please try again.`);
+      setDialogMessage(`Server error. Please try again.`);
     }
+    setDialogOpen(true);
   };
   return (
     <Box
@@ -41,9 +76,9 @@ export default function FeedBack() {
       >
         <Rating
           name="feedback"
-          value={value}
+          value={feedbackValue}
           onChange={(event, newValue) => {
-            setValue(newValue);
+            setFeedbackValue(newValue);
           }}
           size="large"
         />
@@ -56,6 +91,11 @@ export default function FeedBack() {
       >
         Submit Feedback
       </Button>
+      <FeedbackDialog
+        open={dialogOpen}
+        handleClose={() => setDialogOpen(false)}
+        message={dialogMessage}
+      />
     </Box>
   );
 }

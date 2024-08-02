@@ -12,6 +12,7 @@ const api = axios.create({
   },
 });
 
+export const getFoodItems = (data) => api.get("/food-items", data);
 export const getStatistics = (data) => api.get("/dashboard", data);
 export const postPersonalInfo = (data) => api.post("/register-user", data);
 export const postFeedback = (data) => api.post("/feedback", data);
