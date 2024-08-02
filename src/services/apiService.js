@@ -1,7 +1,12 @@
 import axios from "axios";
 
+const baseURL =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_PROD_API_URL
+    : process.env.REACT_APP_DEV_API_URL;
+
 const api = axios.create({
-  baseURL: "http://nutrition-system.switzerlandnorth.cloudapp.azure.com:4000/", // Replace with your server's base URL
+  baseURL: baseURL,
   headers: {
     "Content-Type": "application/json",
   },
