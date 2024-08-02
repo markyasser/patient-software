@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { getDietPlan } from "../../services/apiService";
 import { Container, Typography } from "@mui/material";
+import FeedBack from "./FeedBack";
 
 const columns = [
   {
@@ -35,9 +34,6 @@ const columns = [
   },
 ];
 const DietPlan = ({ dietPlan }) => {
-  const navigate = useNavigate();
-  const [totalRows, setTotalRows] = useState(0);
-
   const rows = dietPlan.weeklyPlan.map((day, idx) => ({
     id: idx,
     day: day.day,
@@ -48,9 +44,10 @@ const DietPlan = ({ dietPlan }) => {
 
   return (
     <Container sx={{ my: 8 }}>
-      <Typography component="h1" variant="h4" fontWeight={700} mb={3}>
+      <Typography component="h1" variant="h4" fontWeight={700}>
         Your Weekly Diet Plan
       </Typography>
+      <FeedBack />
       <DataGrid
         rowSelection={false}
         autoHeight

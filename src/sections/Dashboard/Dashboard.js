@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Container, Stack, Box, Typography } from "@mui/material";
-import { getStatistics } from "../../services/apiService"; // Ensure the import matches the function name
+import { getStatistics } from "../../services/apiService";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { BarChart } from "@mui/x-charts/BarChart";
+import Rating from "@mui/material/Rating";
 
-const Statistics = () => {
+const Dashboard = () => {
   const [statistics, setStatistics] = useState({});
-  const [error, setError] = useState(null); // To handle and display errors
+  const [rating, setRating] = useState({});
+  const [error, setError] = useState(null);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getStatistics();
         console.log("Statistics response:", response.data);
-        setStatistics(response.data);
+        setStatistics(response.data.statistics);
+        setRating(response.data.rating);
+        setValue(response.data.rating.averageRating);
       } catch (error) {
         console.error("Error fetching statistics:", error);
         setError("Failed to fetch statistics data.");
@@ -27,7 +32,36 @@ const Statistics = () => {
     <p style={{ color: "red" }}>{error}</p>
   ) : (
     <Container>
-      <Typography variant="h3" sx={{ mb: 4 }}>
+      <Typography variant="h3">Rating</Typography>
+      <Typography variant="h6">by {rating.totalFeedbacks} users</Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center", // Center items horizontally
+          justifyContent: "center", // Center items vertically if needed
+          "& > legend": { mt: 2 },
+        }}
+        mb={2}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center", // Center Rating component horizontally
+            width: "100%", // Ensure it uses full width to align properly
+          }}
+        >
+          <Rating
+            name="read-only-feedback"
+            value={value}
+            readOnly
+            size="large"
+          />
+        </Box>
+      </Box>
+
+      {/* Statistics Section */}
+      <Typography variant="h3" sx={{ mb: 4, mt: 4 }}>
         Statistics
       </Typography>
       <Stack direction="row" spacing={2} alignItems="center">
@@ -111,4 +145,4 @@ const Statistics = () => {
   );
 };
 
-export default Statistics;
+export default Dashboard;

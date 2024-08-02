@@ -1,6 +1,5 @@
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
 import {
   Alert,
   Box,
@@ -52,7 +51,6 @@ const initialValues = {
 function CreateDietPlan() {
   document.title = "Create Weekly Diet Plan";
 
-  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [currentPage, setCurrentPage] = useState("form");
   const [dietPlan, setDietPlan] = useState({});
