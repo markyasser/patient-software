@@ -8,15 +8,18 @@ import { postFeedback } from "../../services/apiService";
 export default function FeedBack() {
   const [value, setValue] = React.useState(2);
 
-  const handleSubmit = () => {
-    const res = postFeedback(value);
-    if (res.data["status"] === "success") {
-      alert(`Feedback submitted with a rating of ${value}`);
-    } else {
-      alert(`Failed to submit feedback. Please try again.`);
+  const handleSubmit = async () => {
+    try {
+      const res = await postFeedback({ feedback: value });
+      if (res.data["status"] === "success") {
+        alert(`Feedback submitted with a rating of ${value}`);
+      } else {
+        alert(`Failed to submit feedback. Please try again.`);
+      }
+    } catch (error) {
+      alert(`Server error. Please try again.`);
     }
   };
-
   return (
     <Box
       sx={{
