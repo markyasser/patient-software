@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 
 const NavBar = () => {
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{ top: 0, left: 0, right: 0, zIndex: 1200 }}>
       <Container>
         <Toolbar>
           <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
@@ -32,7 +32,7 @@ const NavBar = () => {
                 alt="logo"
                 sx={{ height: 40, marginRight: 2 }}
               />
-              MyApp
+              Smart Nutrition
             </Typography>
           </Box>
           <Button color="inherit" component={Link} to="/create-diet-plan">
