@@ -1,68 +1,246 @@
-import React, { useState } from "react";
+import { Formik } from "formik";
+import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-// import axios from 'axios';
+import {
+  Alert,
+  Box,
+  Button,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+  FormControl,
+  TextField,
+  Typography,
+  Switch,
+  FormControlLabel,
+} from "@mui/material";
+import { useState } from "react";
+import { postPersonalInfo } from "../../services/apiService";
 
-const PersonalInfoForm = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    age: "",
-    gender: "",
-  });
+// Schemas for validation
+const validationSchema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  age: yup.number().required("Age is required"),
+  gender: yup.string().required("Gender is required"),
+  height: yup.number().required("Height is required"),
+  weight: yup.number().required("Weight is required"),
+  blood_pressure_lower: yup
+    .number()
+    .required("Blood Pressure (Lower) is required"),
+  blood_pressure_upper: yup
+    .number()
+    .required("Blood Pressure (Upper) is required"),
+  is_diabetic: yup.boolean().required("Diabetic is required"),
+});
 
-  const history = useNavigate();
+// Intial values for the form
+const initialValues = {
+  name: "",
+  age: "",
+  gender: "",
+  height: "",
+  weight: "",
+  blood_pressure_lower: "",
+  blood_pressure_upper: "",
+  is_diabetic: false,
+};
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+function SignupForm() {
+  document.title = "Create Weekly Diet Plan";
+
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const prepareData = (values) => {
+    return {
+      name: values.name,
+      age: Number(values.age), // Convert to number
+      gender: values.gender,
+      height: Number(values.height), // Convert to number
+      weight: Number(values.weight), // Convert to number
+      blood_pressure_lower: Number(values.blood_pressure_lower), // Convert to number
+      blood_pressure_upper: Number(values.blood_pressure_upper), // Convert to number
+      is_diabetic: Boolean(values.is_diabetic), // Ensure boolean
+    };
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // await axios.post('/api/personal-info', formData);
-    history.push("/health-info");
+  const handleFormSubmit = async (values) => {
+    try {
+      const dataToSend = prepareData(values);
+      await postPersonalInfo(dataToSend);
+
+      navigate("/diet-plan");
+    } catch (error) {
+      setErrorMessage(error.response.data.message);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <label>
-        Age:
-        <input
-          type="number"
-          name="age"
-          value={formData.age}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <label>
-        Gender:
-        <select
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select...</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
-      </label>
+    <Stack spacing={2}>
+      <div>
+        <Typography component="h1" variant="h4" fontWeight={700}>
+          Let&apos;s start
+        </Typography>
+      </div>
 
-      {/* Height */}
-      {/* Weight */}
-      <button type="submit">Next</button>
-    </form>
+      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+
+      <Formik
+        onSubmit={handleFormSubmit}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+      >
+        {({
+          isSubmitting,
+          values,
+          errors,
+          touched,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+        }) => (
+          <Box component="form" autoComplete="off" onSubmit={handleSubmit}>
+            <Stack direction="row" spacing={2}>
+              <TextField
+                fullWidth
+                label="Name"
+                name="name"
+                value={values.name}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={Boolean(touched.name) && Boolean(errors.name)}
+                helperText={touched.name && errors.name}
+              />
+            </Stack>
+
+            <Stack direction="row" spacing={2} mt={2}>
+              <TextField
+                fullWidth
+                label="Age"
+                name="age"
+                value={values.age}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={Boolean(touched.age) && Boolean(errors.age)}
+                helperText={touched.age && errors.age}
+              />
+              <FormControl fullWidth>
+                <InputLabel id="gender-label">Gender</InputLabel>
+                <Select
+                  labelId="gender-label"
+                  label="Gender"
+                  value={values.gender}
+                  name="gender"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={Boolean(touched.gender) && Boolean(errors.gender)}
+                >
+                  <MenuItem value="male">Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                </Select>
+                {Boolean(touched.userType) && (
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "error.main", mt: 0.5 }}
+                  >
+                    {errors.userType}
+                  </Typography>
+                )}
+              </FormControl>
+            </Stack>
+
+            <Stack direction="row" spacing={2} mt={2}>
+              <TextField
+                fullWidth
+                label="Height"
+                name="height"
+                value={values.height}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={Boolean(touched.height) && Boolean(errors.height)}
+                helperText={touched.height && errors.height}
+              />
+              <TextField
+                fullWidth
+                label="Weight"
+                name="weight"
+                value={values.weight}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={Boolean(touched.weight) && Boolean(errors.weight)}
+                helperText={touched.weight && errors.weight}
+              />
+            </Stack>
+
+            <Stack direction="row" spacing={2} mt={2}>
+              <TextField
+                fullWidth
+                label="Blood Pressure (Upper)"
+                name="blood_pressure_upper"
+                value={values.blood_pressure_upper}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={
+                  Boolean(touched.blood_pressure_upper) &&
+                  Boolean(errors.blood_pressure_upper)
+                }
+                helperText={
+                  touched.blood_pressure_upper && errors.blood_pressure_upper
+                }
+              />
+              <TextField
+                fullWidth
+                label="Blood Pressure (Lower)"
+                name="blood_pressure_lower"
+                value={values.blood_pressure_lower}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={
+                  Boolean(touched.blood_pressure_lower) &&
+                  Boolean(errors.blood_pressure_lower)
+                }
+                helperText={
+                  touched.blood_pressure_lower && errors.blood_pressure_lower
+                }
+              />
+            </Stack>
+
+            <Stack direction="row" spacing={2} mt={2}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={values.is_diabetic}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    name="is_diabetic"
+                  />
+                }
+                label="Is Diabetic"
+                error={
+                  Boolean(touched.is_diabetic) && Boolean(errors.is_diabetic)
+                }
+                helperText={touched.is_diabetic && errors.is_diabetic}
+              />
+            </Stack>
+
+            <Button
+              disabled={isSubmitting}
+              fullWidth
+              type="submit"
+              variant="contained"
+              sx={{
+                mt: 3,
+                p: 2,
+              }}
+            >
+              {isSubmitting ? "Creating Diet Plan..." : "Create"}
+            </Button>
+          </Box>
+        )}
+      </Formik>
+    </Stack>
   );
-};
+}
 
-export default PersonalInfoForm;
+export default SignupForm;
