@@ -49,7 +49,7 @@ const initialValues = {
   is_diabetic: false,
 };
 
-function SignupForm() {
+function CreateDietPlan() {
   document.title = "Create Weekly Diet Plan";
 
   const navigate = useNavigate();
@@ -296,4 +296,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default CreateDietPlan;

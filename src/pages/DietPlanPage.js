@@ -1,12 +1,7 @@
-import React from "react";
-import DietPlan from "../sections/DietPlan/DietPlan";
-import FeedbackForm from "../sections/Feedback/FeedbackForm";
+import CreateDietPlan from "../sections/Form/CreateDietPlan";
 
-const DietPlanPage = () => (
-  <div>
-    <DietPlan />
-    <FeedbackForm />
-  </div>
-);
+function DietPlanPage() {
+  return <CreateDietPlan />;
+}
 
 export default DietPlanPage;
