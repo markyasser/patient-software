@@ -9,4 +9,5 @@ const api = axios.create({
 
 export const getStatistics = (data) => api.get("/analyze-data", data);
 export const postPersonalInfo = (data) => api.post("/register-user", data);
+export const getDietPlan = (data) => api.get("/diet-plan", data);
 export const postFeedback = (data) => api.post("/feedback", data);
