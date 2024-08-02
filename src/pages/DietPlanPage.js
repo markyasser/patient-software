@@ -1,6 +1,6 @@
 import React from "react";
-import DietPlan from "../components/DietPlan/DietPlan";
-import FeedbackForm from "../components/Feedback/FeedbackForm";
+import DietPlan from "../sections/DietPlan/DietPlan";
+import FeedbackForm from "../sections/Feedback/FeedbackForm";
 
 const DietPlanPage = () => (
   <div>

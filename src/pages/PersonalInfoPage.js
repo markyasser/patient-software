@@ -1,5 +1,5 @@
 import React from "react";
-import PersonalInfoForm from "../components/Form/PersonalInfoForm";
+import PersonalInfoForm from "../sections/Form/PersonalInfoForm";
 
 const PersonalInfoPage = () => (
   <div>

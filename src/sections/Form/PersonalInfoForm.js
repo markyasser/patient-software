@@ -57,6 +57,9 @@ const PersonalInfoForm = () => {
           <option value="Female">Female</option>
         </select>
       </label>
+
+      {/* Height */}
+      {/* Weight */}
       <button type="submit">Next</button>
     </form>
   );

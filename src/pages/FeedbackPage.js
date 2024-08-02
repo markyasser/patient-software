@@ -1,5 +1,5 @@
 import React from "react";
-import FeedbackForm from "../components/Feedback/FeedbackForm";
+import FeedbackForm from "../sections/Feedback/FeedbackForm";
 
 const FeedbackPage = () => (
   <div>
