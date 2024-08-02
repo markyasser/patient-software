@@ -19,7 +19,7 @@ import {
 import { useState } from "react";
 import { postPersonalInfo } from "../../services/apiService";
 import DietPlan from "../DietPlan/DietPlan";
-import logo from "../../assets/logo.jpeg";
+import logo from "../../assets/create-plan.jpeg";
 
 // Schemas for validation
 const validationSchema = yup.object().shape({

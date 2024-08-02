@@ -5,13 +5,11 @@ import FeedbackPage from "./pages/FeedbackPage";
 import StatisticsPage from "./pages/StatisticsPage";
 
 const AppRoutes = () => (
-  <Router>
-    <Routes>
-      <Route path="/create-diet-plan" element={<DietPlanPage />} />
-      <Route path="/feedback" element={<FeedbackPage />} />
-      <Route path="/" element={<StatisticsPage />} />
-    </Routes>
-  </Router>
+  <Routes>
+    <Route path="/create-diet-plan" element={<DietPlanPage />} />
+    <Route path="/feedback" element={<FeedbackPage />} />
+    <Route path="/" element={<StatisticsPage />} />
+  </Routes>
 );
 
 export default AppRoutes;
