@@ -307,7 +307,7 @@ function CreateDietPlan() {
                                 "IsDiabetic"
                               )}
                             />
-                            <ListItemText primary="IsDiabetic" />
+                            <ListItemText primary="Diabetic" />
                           </MenuItem>
 
                           <MenuItem
@@ -319,7 +319,7 @@ function CreateDietPlan() {
                                 "HighBloodPressure"
                               )}
                             />
-                            <ListItemText primary="HighBloodPressure" />
+                            <ListItemText primary="Hypertension" />
                           </MenuItem>
                         </Select>
                         {Boolean(touched.previousConditions) && (
