@@ -84,6 +84,9 @@ const columns = [
   },
 ];
 const DietPlan = ({ dietPlan }) => {
+  const bmr = dietPlan.bmr.toFixed(1);
+  const dailyCalories = dietPlan.dailyCalories.toFixed(1);
+  const bmi = dietPlan.bmi.toFixed(1);
   const rows = dietPlan.weeklyPlan.map((day, idx) => ({
     id: idx,
     day: day.day,
@@ -98,6 +101,15 @@ const DietPlan = ({ dietPlan }) => {
         Your Weekly Diet Plan
       </Typography>
       <FeedBack />
+      <Typography variant="h6" gutterBottom>
+        BMR (Basal Metabolic Rate): {bmr} kcal
+      </Typography>
+      <Typography variant="h6" gutterBottom>
+        Daily Needed Calories: {dailyCalories} kcal per day
+      </Typography>
+      <Typography variant="h6" gutterBottom>
+        Body Mass Index: {bmi} kg/m2 (Ideal between 18.5 and 24.9 kg/m2)
+      </Typography>
       <DataGrid
         rowSelection={false}
         autoHeight
