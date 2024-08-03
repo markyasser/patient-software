@@ -103,8 +103,7 @@ const DietPlan = ({ dietPlan }) => {
         autoHeight
         rows={rows}
         columns={columns}
-        autoPageSize
-        rowHeight={150} // Adjust this value to ensure all items are visible
+        rowHeight={200} // Adjust this value to ensure all items are visible
         sx={{
           "& .MuiDataGrid-cell": {
             display: "flex",

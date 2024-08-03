@@ -27,17 +27,18 @@ import { getFoodItems } from "../../services/apiService";
 // Schemas for validation
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
-  age: yup.number().required("Age is required"),
+  age: yup.number().required("Age is required").typeError("Must be a number"),
   gender: yup.string().required("Gender is required"),
-  height: yup.number().required("Height is required"),
-  weight: yup.number().required("Weight is required"),
-  blood_pressure_lower: yup
+  height: yup
     .number()
-    .required("Blood Pressure (Lower) is required"),
-  blood_pressure_upper: yup
+    .required("Height is required")
+    .typeError("Must be a number"),
+  weight: yup
     .number()
-    .required("Blood Pressure (Upper) is required"),
-  is_diabetic: yup.boolean().required("Diabetic is required"),
+    .required("Weight is required")
+    .typeError("Must be a number"),
+  activityLevel: yup.number().typeError("Must be a number"),
+  previousConditions: yup.array().of(yup.string()),
   excludedFoods: yup.array().of(yup.string()),
 });
 
@@ -48,28 +49,10 @@ const initialValues = {
   gender: "",
   height: "",
   weight: "",
-  blood_pressure_lower: "",
-  blood_pressure_upper: "",
-  is_diabetic: false,
+  activityLevel: "",
+  previousConditions: [],
   excludedFoods: [],
 };
-
-// List of foods
-// const foodOptions = [
-//   "Bread",
-//   "Pasta",
-//   "Rice",
-//   "Milk",
-//   "Cheese",
-//   "Chicken",
-//   "Fish",
-//   "Beef",
-//   "Pork",
-//   "Eggs",
-//   "Nuts",
-//   "Fruits",
-//   "Vegetables",
-// ];
 
 function CreateDietPlan() {
   document.title = "Create Weekly Diet Plan";
@@ -101,15 +84,18 @@ function CreateDietPlan() {
       gender: values.gender,
       height: Number(values.height), // Convert to number
       weight: Number(values.weight), // Convert to number
-      blood_pressure_lower: Number(values.blood_pressure_lower), // Convert to number
-      blood_pressure_upper: Number(values.blood_pressure_upper), // Convert to number
-      is_diabetic: Boolean(values.is_diabetic), // Ensure boolean
+      sedentary_activity_level: Number(values.activityLevel), // Convert to number
+      is_high_blood_pressure: Boolean(
+        values.previousConditions.includes("HighBloodPressure")
+      ), // Ensure boolean
+      is_diabetic: Boolean(values.previousConditions.includes("IsDiabetic")), // Ensure boolean
       excludedFoods: values.excludedFoods, // List of excluded foods
     };
   };
 
   const handleFormSubmit = async (values) => {
     try {
+      console.log(values);
       const dataToSend = prepareData(values);
       const res = await postPersonalInfo(dataToSend);
       console.log(res.data);
@@ -256,57 +242,95 @@ function CreateDietPlan() {
                     </Stack>
 
                     <Stack direction="row" spacing={2} mt={2}>
-                      <TextField
-                        fullWidth
-                        label="Blood Pressure (Upper)"
-                        name="blood_pressure_upper"
-                        value={values.blood_pressure_upper}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={
-                          Boolean(touched.blood_pressure_upper) &&
-                          Boolean(errors.blood_pressure_upper)
-                        }
-                        helperText={
-                          touched.blood_pressure_upper &&
-                          errors.blood_pressure_upper
-                        }
-                      />
-                      <TextField
-                        fullWidth
-                        label="Blood Pressure (Lower)"
-                        name="blood_pressure_lower"
-                        value={values.blood_pressure_lower}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        error={
-                          Boolean(touched.blood_pressure_lower) &&
-                          Boolean(errors.blood_pressure_lower)
-                        }
-                        helperText={
-                          touched.blood_pressure_lower &&
-                          errors.blood_pressure_lower
-                        }
-                      />
-                    </Stack>
+                      <FormControl fullWidth>
+                        <InputLabel id="activity-level-label">
+                          Activity Level
+                        </InputLabel>
+                        <Select
+                          labelId="activity-level-label"
+                          label="Activity Level"
+                          value={values.activityLevel}
+                          name="activityLevel"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={
+                            Boolean(touched.activityLevel) &&
+                            Boolean(errors.activityLevel)
+                          }
+                        >
+                          <MenuItem value="1.2">
+                            Little (or no exercise)
+                          </MenuItem>
+                          <MenuItem value="1.375">
+                            Lightly active (exercise 1-3 days/week)
+                          </MenuItem>
+                          <MenuItem value="1.55">
+                            Moderately active (exercise 3-5 days/week)
+                          </MenuItem>
+                          <MenuItem value="1.725">
+                            Active (exercise 6-7 days/week)
+                          </MenuItem>
+                          <MenuItem value="1.9">
+                            Extremely active (hard exercise 6-7 days/week)
+                          </MenuItem>
+                        </Select>
+                        {Boolean(touched.userType) && (
+                          <Typography
+                            variant="body2"
+                            sx={{ color: "error.main", mt: 0.5 }}
+                          >
+                            {errors.userType}
+                          </Typography>
+                        )}
+                      </FormControl>
+                      <FormControl fullWidth>
+                        <InputLabel id="previous-conditions-label">
+                          Previous Conditions
+                        </InputLabel>
+                        <Select
+                          labelId="previous-conditions-label"
+                          label="Previous Conditions"
+                          multiple
+                          value={values.previousConditions}
+                          name="previousConditions"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          error={
+                            Boolean(touched.previousConditions) &&
+                            Boolean(errors.previousConditions)
+                          }
+                          renderValue={(selected) => selected.join(", ")}
+                        >
+                          <MenuItem key="IsDiabetic" value="IsDiabetic">
+                            <Checkbox
+                              checked={values.previousConditions.includes(
+                                "IsDiabetic"
+                              )}
+                            />
+                            <ListItemText primary="IsDiabetic" />
+                          </MenuItem>
 
-                    <Stack direction="row" spacing={2} mt={2}>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={values.is_diabetic}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            name="is_diabetic"
-                          />
-                        }
-                        label="Is Diabetic"
-                        error={
-                          Boolean(touched.is_diabetic) &&
-                          Boolean(errors.is_diabetic)
-                        }
-                        helperText={touched.is_diabetic && errors.is_diabetic}
-                      />
+                          <MenuItem
+                            key="HighBloodPressure"
+                            value="HighBloodPressure"
+                          >
+                            <Checkbox
+                              checked={values.previousConditions.includes(
+                                "HighBloodPressure"
+                              )}
+                            />
+                            <ListItemText primary="HighBloodPressure" />
+                          </MenuItem>
+                        </Select>
+                        {Boolean(touched.previousConditions) && (
+                          <Typography
+                            variant="body2"
+                            sx={{ color: "error.main", mt: 0.5 }}
+                          >
+                            {errors.previousConditions}
+                          </Typography>
+                        )}
+                      </FormControl>
                     </Stack>
 
                     <Stack direction="row" spacing={2} mt={2}>
