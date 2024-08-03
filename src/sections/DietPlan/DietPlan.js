@@ -1,8 +1,7 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Container, Typography } from "@mui/material";
+import { Container, Typography, Stack } from "@mui/material";
 import FeedBack from "./FeedBack";
-
 const columns = [
   {
     field: "day",
@@ -17,13 +16,47 @@ const columns = [
     width: 300,
     headerAlign: "center",
     align: "center",
+    renderCell: (params) => (
+      <Stack spacing={1} alignItems="center" sx={{ my: 1 }}>
+        {params.value.map((item, index) => (
+          <Typography
+            key={index}
+            variant="body2"
+            sx={{
+              borderBottom:
+                index < params.value.length - 1 ? "1px solid #ccc" : "none",
+              pb: 0.5,
+            }}
+          >
+            {item}
+          </Typography>
+        ))}
+      </Stack>
+    ),
   },
   {
     field: "lunch",
-    headerName: "lunch",
+    headerName: "Lunch",
     width: 350,
     headerAlign: "center",
     align: "center",
+    renderCell: (params) => (
+      <Stack spacing={1} alignItems="center" sx={{ my: 1 }}>
+        {params.value.map((item, index) => (
+          <Typography
+            key={index}
+            variant="body2"
+            sx={{
+              borderBottom:
+                index < params.value.length - 1 ? "1px solid #ccc" : "none",
+              pb: 0.5,
+            }}
+          >
+            {item}
+          </Typography>
+        ))}
+      </Stack>
+    ),
   },
   {
     field: "dinner",
@@ -31,15 +64,32 @@ const columns = [
     width: 350,
     headerAlign: "center",
     align: "center",
+    renderCell: (params) => (
+      <Stack spacing={1} alignItems="center" sx={{ my: 1 }}>
+        {params.value.map((item, index) => (
+          <Typography
+            key={index}
+            variant="body2"
+            sx={{
+              borderBottom:
+                index < params.value.length - 1 ? "1px solid #ccc" : "none",
+              pb: 0.5,
+            }}
+          >
+            {item}
+          </Typography>
+        ))}
+      </Stack>
+    ),
   },
 ];
 const DietPlan = ({ dietPlan }) => {
   const rows = dietPlan.weeklyPlan.map((day, idx) => ({
     id: idx,
     day: day.day,
-    breakfast: day.breakfast.map((item) => item.name).join(", "),
-    lunch: day.lunch.map((item) => item.name).join(", "),
-    dinner: day.dinner.map((item) => item.name).join(", "),
+    breakfast: day.breakfast.map((item) => `${item.quantity} ${item.name}`),
+    lunch: day.lunch.map((item) => `${item.quantity} ${item.name}`),
+    dinner: day.dinner.map((item) => `${item.quantity} ${item.name}`),
   }));
 
   return (
@@ -54,6 +104,13 @@ const DietPlan = ({ dietPlan }) => {
         rows={rows}
         columns={columns}
         autoPageSize
+        rowHeight={150} // Adjust this value to ensure all items are visible
+        sx={{
+          "& .MuiDataGrid-cell": {
+            display: "flex",
+            alignItems: "center",
+          },
+        }}
       />
     </Container>
   );
