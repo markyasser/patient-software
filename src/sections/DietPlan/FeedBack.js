@@ -38,7 +38,7 @@ const FeedbackDialog = ({ open, handleClose, message, onSuccess }) => {
 export default function FeedBack() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
-  const [feedbackValue, setFeedbackValue] = useState(2);
+  const [feedbackValue, setFeedbackValue] = useState(5); // Default value is 5
 
   const handleSubmit = async () => {
     try {
