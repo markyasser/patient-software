@@ -28,6 +28,10 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  // Convert histograms to arrays of [label, value]
+  const convertHistogram = (histogram) =>
+    Object.entries(histogram).map(([key, value]) => [key, value]);
+
   return error ? (
     <p style={{ color: "red" }}>{error}</p>
   ) : (
@@ -99,7 +103,9 @@ const Dashboard = () => {
               height={300}
               series={[
                 {
-                  data: statistics.heightHistogram.map((item) => item[1]),
+                  data: convertHistogram(statistics.heightHistogram).map(
+                    (item) => item[1]
+                  ),
                   label: "Heights",
                   id: "uvId",
                   stack: "total",
@@ -108,8 +114,8 @@ const Dashboard = () => {
               ]}
               xAxis={[
                 {
-                  data: statistics.heightHistogram.map((item) =>
-                    item[0].toString()
+                  data: convertHistogram(statistics.heightHistogram).map(
+                    (item) => item[0]
                   ),
                   scaleType: "band",
                 },
@@ -122,7 +128,9 @@ const Dashboard = () => {
               height={300}
               series={[
                 {
-                  data: statistics.weightHistogram.map((item) => item[1]),
+                  data: convertHistogram(statistics.weightHistogram).map(
+                    (item) => item[1]
+                  ),
                   label: "Weights",
                   id: "uvId",
                   stack: "total",
@@ -131,8 +139,8 @@ const Dashboard = () => {
               ]}
               xAxis={[
                 {
-                  data: statistics.weightHistogram.map((item) =>
-                    item[0].toString()
+                  data: convertHistogram(statistics.weightHistogram).map(
+                    (item) => item[0]
                   ),
                   scaleType: "band",
                 },
